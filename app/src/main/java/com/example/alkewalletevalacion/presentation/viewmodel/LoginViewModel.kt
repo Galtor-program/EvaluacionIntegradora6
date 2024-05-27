@@ -55,15 +55,7 @@ class LoginViewModel(application: Application): AndroidViewModel(application) {
     inner class Factory(private val application: Application) : ViewModelProvider.Factory {
         override  fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-                /**
-                 * Advertencia de tipo
-                 */
                 @Suppress("UNCHECKED_CAST")
-                /**
-                 * Crea una instancia de LoginViewModel usando application
-                 * el objeto del tipo T es generico del ViewModel que se
-                 * esta creando.
-                 */
                 return LoginViewModel(application) as T
             }
             throw IllegalArgumentException("Clase de ViewModel Desconocida")
