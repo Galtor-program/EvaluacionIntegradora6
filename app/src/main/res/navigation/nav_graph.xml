@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.alkewalletevalacion.presentation.view.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment2"
+            app:destination="@id/signupFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_pageLogFragment"
+            app:destination="@id/pageLogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.example.alkewalletevalacion.presentation.view.SignupFragment"
+        android:label="fragment_signup"
+        tools:layout="@layout/fragment_signup" >
+        <action
+            android:id="@+id/action_signupFragment_to_pageLogFragment"
+            app:destination="@id/pageLogFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pageLogFragment"
+        android:name="com.example.alkewalletevalacion.presentation.view.PageLogFragment"
+        android:label="fragment_page_log"
+        tools:layout="@layout/fragment_page_log" >
+        <action
+            android:id="@+id/action_pageLogFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+        <action
+            android:id="@+id/action_pageLogFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.alkewalletevalacion.presentation.view.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_sendingMoneyFragment"
+            app:destination="@id/sendingMoneyFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_requestMoneyFragment"
+            app:destination="@id/requestMoneyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.alkewalletevalacion.presentation.view.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendingMoneyFragment"
+        android:name="com.example.alkewalletevalacion.presentation.view.SendingMoneyFragment"
+        android:label="fragment_sending_money"
+        tools:layout="@layout/fragment_sending_money" >
+        <action
+            android:id="@+id/action_sendingMoneyFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestMoneyFragment"
+        android:name="com.example.alkewalletevalacion.presentation.view.RequestMoneyFragment"
+        android:label="fragment_request_money"
+        tools:layout="@layout/fragment_request_money" >
+        <action
+            android:id="@+id/action_requestMoneyFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+</navigation>

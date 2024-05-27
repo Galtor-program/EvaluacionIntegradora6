@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondologin"
+    tools:context=".presentation.view.LoginFragment" >
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="134dp"
+        android:layout_marginTop="272dp"
+        android:layout_marginEnd="135dp"
+        android:src="@drawable/vector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/AlkeWallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="134dp"
+        android:layout_marginEnd="135dp"
+        android:layout_marginBottom="472dp"
+        android:fontFamily="@font/jua"
+        android:text="AlkeWallet"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        app:layout_constraintVertical_bias="0.111" />
+
+    <TextView
+        android:id="@+id/lugar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="134dp"
+        android:layout_marginTop="124dp"
+        android:layout_marginEnd="135dp"
+        android:fontFamily="@font/jua"
+        android:text="@string/el_lugar_m_s_seguro_para_tu_dinero"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AlkeWallet" />
+
+    <Button
+        android:id="@+id/CrearCuentaNueva"
+        android:layout_width="315dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="132dp"
+        android:layout_marginEnd="39dp"
+        android:backgroundTint="#63B2F1"
+        android:fontFamily="@font/jua"
+        android:gravity="center"
+        android:text="@string/crear_cuenta_nueva"
+        android:textAlignment="center"
+        android:textSize="14dp"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lugar" />
+
+    <TextView
+        android:id="@+id/yaTienesCuenta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="134dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="135dp"
+        android:layout_marginBottom="50dp"
+        android:fontFamily="@font/jua"
+        android:text="Ya tienes cuenta?"
+        android:textColor="#1A87DD"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CrearCuentaNueva" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

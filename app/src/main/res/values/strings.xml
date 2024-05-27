@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AlkeWalletEvalacion</string>
+    <string name="alkewallet">AlkeWallet</string>
+    <string name="el_lugar_m_s_seguro_para_tu_dinero">El lugar mas seguro para tu dinero</string>
+    <string name="crear_cuenta_nueva">Crear cuenta nueva</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
