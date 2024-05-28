@@ -45,9 +45,9 @@ class PageLogViewModel (application: Application, private val authUseCase: AuthU
     }
 
     /**
-     * Clase interna del factory
+     * Clase  factory
      */
-    inner class Factory(private val application: Application, private val authUseCase: AuthUseCase) : ViewModelProvider.Factory {
+    class Factory(private val application: Application, private val authUseCase: AuthUseCase) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PageLogViewModel::class.java)) {
