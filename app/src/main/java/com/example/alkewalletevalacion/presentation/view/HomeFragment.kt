@@ -39,13 +39,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Crear una instancia del ViewModel
+        /**
+         * Creacion de la instancia del viewModel
+         */
         val usuariosDataSet = UsuariosDataSet()
         val usuariosListUseCase = UsuariosListUseCase(usuariosDataSet)
         val viewModelFactory = HomeViewModelFactory(usuariosListUseCase)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
-        // Configurar el RecyclerView con el adaptador
+        /**
+         * Se configura el adaptador
+         */
         usuariosAdapter = UsuariosAdapter(emptyList())
         binding.recyclerUsers.apply {
             adapter = usuariosAdapter
@@ -57,10 +61,14 @@ class HomeFragment : Fragment() {
             usuariosAdapter.notifyDataSetChanged()
         })
 
-        // Fetch de la lista de usuarios
+        /**
+         * aca pedimos la lista de usuarios
+         */
         viewModel.fetchUsuariosList()
 
-        // Configurar el onClickListener para el botón alPerfil
+        /**
+         * aca navegamos hacia el fragmento del perfil
+         */
         binding.alPerfil.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
         }

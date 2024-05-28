@@ -1,6 +1,9 @@
 package com.example.alkewalletevalacion.data.model
 
-class Usuarios(
+/**
+ * Atributos de Usuario.
+ */
+data class Usuarios(
     val nombre:String,
     val fecha: String,
     val saldo: String,

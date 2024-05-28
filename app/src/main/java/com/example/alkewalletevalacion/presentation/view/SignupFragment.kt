@@ -30,25 +30,40 @@ class SignupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        /**
+         * Preparamos la instancia del AuthUseCase
+         */
         val authUseCase = AuthUseCase()
         val signUpViewModelFactory = SignUpViewModelFactory(authUseCase)
+        /**
+         * Iniciamos el ViewModel utilizando el Factory
+         */
         viewModel = ViewModelProvider(this, signUpViewModelFactory)[SignUpViewModel::class.java]
-
+        /**
+         * Registro del usuario
+         */
         binding.buttonRegistrar.setOnClickListener {
             val nombre = binding.ingresarNombreTxt.text.toString()
             val apellido = binding.ingresarApellidoTxt.text.toString()
             val email = binding.ingresarEmailTxt.text.toString()
             val password = binding.ingresarPassTxt.text.toString()
             val confirmPassword = binding.reingresaPassTxt.text.toString()
-
+            /**
+             * Acá registramos un nuevo usuario
+             */
             viewModel.registerUser(requireContext(), nombre, apellido, email, password, confirmPassword)
         }
+        /**
+         * Boton para ir hacia la pagina de Logueo ya que indicamos que contamos con la cuenta
+         */
 
         binding.haciaElLoginTxt.setOnClickListener {
             findNavController().navigate(R.id.action_signupFragment_to_pageLogFragment)
         }
 
+        /**
+         * Boton para ir a la pagina de Logueo despues de crear la cuenta.
+          */
         viewModel.navigateToLogin.observe(viewLifecycleOwner, Observer {
             findNavController().navigate(R.id.action_signupFragment_to_pageLogFragment)
         })
