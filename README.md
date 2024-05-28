@@ -4,6 +4,8 @@
 ## Tecnologias: Se utiliza Kotlin, viewBinding, fragments.
 ## Testeo: El código se comportó de forma esperada en un Pixel 6 API 34
 ## Instalación: Clonar el repositorio en carpeta local y abrir con Android Studio.
+> [!CAUTION]
+> No hay usuarios previamente creados, por lo que debe crearse primero una cuenta para el login
 ## RoadMap: Funcionalidad a los items de enviar y recibir dinero.
 
 ## Estructura del proyecto
