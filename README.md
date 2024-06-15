@@ -1,4 +1,4 @@
-# Evaluación Integradora Módulo 5
+# Evaluación Integradora Módulo 6
 # Contenidos
 ## Funcionaminento: Aplicación Android que Simula el Login de aplicación de WalletDigital con validaciones y al ingresar muestra un recycleView con imagenes y datos de usuarios 
 ## Tecnologias: Se utiliza Kotlin, viewBinding, fragments.
