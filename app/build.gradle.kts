@@ -43,6 +43,21 @@ android {
 
 dependencies {
 
+
+    // retrofit
+    implementation (libs.retrofit)
+
+
+    //Convertor Gson
+    implementation (libs.gson)
+
+
+    //Factory Gson
+    implementation (libs.converter.gson)
+
+    implementation (libs.okhttp)
+    implementation (libs.logging.interceptor)
+
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // LiveData

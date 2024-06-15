@@ -31,10 +31,9 @@ class SignUpViewModel(private val authUseCase: AuthUseCase) : ViewModel() {
          * Metodo para revisar si el registro cumple con los atributos y los métodos
          * de verificación en el AuthUseCase.
          */
-        if (authUseCase.registerUser(context, nombre, apellido, email, password, confirmPassword)) {
-            _navigateToLogin.value = Unit
+        //if (authUseCase.registerUser(context, nombre, apellido, email, password, confirmPassword)) {
+        //    _navigateToLogin.value = Unit
         }
     }
 
 
-}

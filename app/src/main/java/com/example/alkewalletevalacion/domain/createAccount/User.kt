@@ -1,4 +1,4 @@
-package com.example.alkewalletevalacion.domain
+package com.example.alkewalletevalacion.domain.createAccount
 
 /**
  * Atributos del usuario cuando se registra.

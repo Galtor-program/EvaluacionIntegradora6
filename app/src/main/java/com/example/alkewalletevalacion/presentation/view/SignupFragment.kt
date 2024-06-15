@@ -33,12 +33,12 @@ class SignupFragment : Fragment() {
         /**
          * Preparamos la instancia del AuthUseCase
          */
-        val authUseCase = AuthUseCase()
-        val signUpViewModelFactory = SignUpViewModelFactory(authUseCase)
+        //val authUseCase = AuthUseCase()
+        //val signUpViewModelFactory = SignUpViewModelFactory(authUseCase)
         /**
          * Iniciamos el ViewModel utilizando el Factory
          */
-        viewModel = ViewModelProvider(this, signUpViewModelFactory)[SignUpViewModel::class.java]
+       // viewModel = ViewModelProvider(this, signUpViewModelFactory)[SignUpViewModel::class.java]
         /**
          * Registro del usuario
          */

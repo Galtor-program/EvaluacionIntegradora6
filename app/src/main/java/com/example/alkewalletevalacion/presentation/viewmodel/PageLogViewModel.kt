@@ -7,53 +7,36 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.alkewalletevalacion.data.network.response.LoginRequest
 import com.example.alkewalletevalacion.domain.usecases.AuthUseCase
 
-class PageLogViewModel (application: Application, private val authUseCase: AuthUseCase): AndroidViewModel(application){
-    /**
-     * Con este live Data navegamos hacia el registro
-     */
-    private val _navigateToSignUp = MutableLiveData<Unit>()
-    val navigateToSignUp: LiveData<Unit>
-        get() = _navigateToSignUp
+class PageLogViewModel(private val authUseCase: AuthUseCase) : ViewModel() {
 
-    /**
-     * Con este liveData navegamos hacia el Home
-     */
-    private val _navigationToHome = MutableLiveData<Unit>()
-    val navigationToHome: LiveData<Unit>
-        get() = _navigationToHome
-
-    /**
-     * Al hacer click en el inicio de sesion pasamos el correo y el password a la funcion
-     * se genera un log para revisar si los datos vienen como corresponde
-     * llamamos al método de autenticar usuario desde el AuthUseCase
-     * Si el logueo es correcto pasamos hacia el HomeFragment.
-     */
+    // Método para iniciar sesión
     fun onLoginClick(email: String, password: String) {
-        Log.d("PageLogViewModel", "Email recibido en ViewModel: $email, Password recibido en ViewModel: $password")
-        if (authUseCase.authenticateUser(getApplication(), email, password)) {
-            _navigationToHome.value = Unit
+        val loginRequest = LoginRequest(email, password)
+        authUseCase.authenticateUser(loginRequest) { success, accessToken ->
+            if (success) {
+                // Iniciar navegación hacia HomeFragment si el inicio de sesión fue exitoso
+                navigationToHome.value = Unit
+            } else {
+                Log.e("PageLogViewModel", "Error en autenticación: No se pudo iniciar sesión.")
+                // Manejar el error de inicio de sesión aquí si es necesario
+            }
         }
     }
 
-    /**
-     * Aca navegamos hacia el Fragmento para crear cuenta.
-     */
-    fun onSignUpClicked() {
-        _navigateToSignUp.value = Unit
-    }
+    // LiveData para navegar hacia el HomeFragment
+    val navigationToHome = MutableLiveData<Unit>()
 
-    /**
-     * Clase  factory
-     */
-    class Factory(private val application: Application, private val authUseCase: AuthUseCase) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
+    // Factory para el ViewModel
+    class Factory(private val application: Application, private val authUseCase: AuthUseCase) : ViewModelProvider.AndroidViewModelFactory(application) {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(PageLogViewModel::class.java)) {
-                return PageLogViewModel(application, authUseCase) as T
+                @Suppress("UNCHECKED_CAST")
+                return PageLogViewModel(authUseCase) as T
             }
-            throw IllegalArgumentException("Clase de ViewModel Desconocida")
+            throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 }
