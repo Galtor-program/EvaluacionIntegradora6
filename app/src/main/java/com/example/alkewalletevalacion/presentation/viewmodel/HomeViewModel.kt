@@ -5,20 +5,37 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-import com.example.alkewalletevalacion.data.model.Usuarios
-import com.example.alkewalletevalacion.domain.usecases.UsuariosListUseCase
 
-class HomeViewModel(private val usuariosListUseCase: UsuariosListUseCase) : ViewModel() {
-    /**
-     * Live data para lista de Usuarios
-     */
-    private val _usuariosList = MutableLiveData<List<Usuarios>>()
-    val usuariosList: LiveData<List<Usuarios>> get() = _usuariosList
+import com.example.alkewalletevalacion.data.network.response.UserResponse
+import com.example.alkewalletevalacion.domain.usecases.AccountInfoUseCase
+import com.example.alkewalletevalacion.data.network.response.AccountResponse
+import com.example.alkewalletevalacion.domain.usecases.UserInfoUseCase
 
-    /**
-     * Fetch recupera la lista de usuarios.
-     */
-    fun fetchUsuariosList() {
-        _usuariosList.value = usuariosListUseCase.getUsuariosList()
+class HomeViewModel(
+    private val userInfoUseCase: UserInfoUseCase,
+    private val accountInfoUseCase: AccountInfoUseCase
+) : ViewModel() {
+
+    private val _userInfo = MutableLiveData<UserResponse?>()
+    val userInfo: LiveData<UserResponse?> get() = _userInfo
+
+    private val _accountInfo = MutableLiveData<AccountResponse?>()
+    val accountInfo: LiveData<AccountResponse?> get() = _accountInfo
+
+    fun fetchUserInfo() {
+        userInfoUseCase.getUserInfo { success, userResponse ->
+            if (success) {
+                _userInfo.value = userResponse
+                fetchAccountInfo()
+            }
+        }
+    }
+
+    private fun fetchAccountInfo() {
+        accountInfoUseCase.getAccountInfo { success, accountResponse ->
+            if (success) {
+                _accountInfo.value = accountResponse
+            }
+        }
     }
 }

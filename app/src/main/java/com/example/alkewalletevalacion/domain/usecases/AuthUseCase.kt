@@ -7,8 +7,7 @@ import com.example.alkewalletevalacion.data.network.retrofit.RetrofitHelper
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.net.URLDecoder
-import java.nio.charset.StandardCharsets
+
 
 class AuthUseCase(private val authService: AuthService) {
     fun authenticateUser(request: LoginRequest, callback: (Boolean, String?) -> Unit) {

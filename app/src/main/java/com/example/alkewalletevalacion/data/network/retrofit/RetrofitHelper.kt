@@ -16,7 +16,7 @@ object RetrofitHelper {
 
         val client = OkHttpClient.Builder()
             .addInterceptor(interceptor)
-            .addInterceptor(AuthInterceptor(context)) // Asegúrate de incluir el interceptor para el token JWT
+            .addInterceptor(AuthInterceptor(context))
             .build()
 
         return Retrofit.Builder()
