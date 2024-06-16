@@ -1,6 +1,7 @@
 package com.example.alkewalletevalacion.presentation.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,11 +17,13 @@ class HomeViewModel(
     private val accountInfoUseCase: AccountInfoUseCase
 ) : ViewModel() {
 
+    private val TAG = "HomeViewModel"
+
     private val _userInfo = MutableLiveData<UserResponse?>()
     val userInfo: LiveData<UserResponse?> get() = _userInfo
 
-    private val _accountInfo = MutableLiveData<AccountResponse?>()
-    val accountInfo: LiveData<AccountResponse?> get() = _accountInfo
+    private val _accountInfo = MutableLiveData<List<AccountResponse>?>() // Cambiado a List<AccountResponse>
+    val accountInfo: LiveData<List<AccountResponse>?> get() = _accountInfo
 
     fun fetchUserInfo() {
         userInfoUseCase.getUserInfo { success, userResponse ->
@@ -35,6 +38,7 @@ class HomeViewModel(
         accountInfoUseCase.getAccountInfo { success, accountResponse ->
             if (success) {
                 _accountInfo.value = accountResponse
+                Log.d(TAG, "fetchAccountInfo - AccountResponse List: $accountResponse")
             }
         }
     }

@@ -16,5 +16,5 @@ interface AuthService {
     fun getUserInfo(): Call<UserResponse>
 
     @GET("accounts/me")
-    fun getAccountInfo(): Call<AccountResponse>
+    fun getAccountInfo(): Call<List<AccountResponse>>
 }

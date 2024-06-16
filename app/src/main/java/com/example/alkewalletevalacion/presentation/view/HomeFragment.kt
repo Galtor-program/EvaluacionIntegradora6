@@ -1,6 +1,7 @@
 package com.example.alkewalletevalacion.presentation.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
 
+    private val TAG = "HomeFragment"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,13 +43,17 @@ class HomeFragment : Fragment() {
 
         viewModel.userInfo.observe(viewLifecycleOwner, Observer { userInfo ->
             userInfo?.let {
-                binding.cuentaUsuario.text = "Bienvenido, ${it.firstName}"
+                binding.nombreUsuario.text = "Bienvenido! ${it.firstName}"
             }
         })
 
-        viewModel.accountInfo.observe(viewLifecycleOwner, Observer { accountInfo ->
-            accountInfo?.let {
-                binding.nombreUsuario.text = accountInfo.money.toString()
+        viewModel.accountInfo.observe(viewLifecycleOwner, Observer { accountInfoList ->
+            accountInfoList?.let {
+                if (it.isNotEmpty()) {
+                    val accountInfo = it[0] // Muestra el primer elemento de la lista, ajusta según necesites
+                    binding.cuentaUsuario.text = "${accountInfo.money}"
+                    Log.d(TAG, "accountInfo LiveData Observer - AccountResponse List: $accountInfoList")
+                }
             }
         })
 

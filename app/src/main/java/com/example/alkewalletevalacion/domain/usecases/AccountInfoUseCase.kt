@@ -11,20 +11,20 @@ class AccountInfoUseCase(private val authService: AuthService) {
 
     private val TAG = "AccountInfoUseCase"
 
-    fun getAccountInfo(onResult: (Boolean, AccountResponse?) -> Unit) {
-        authService.getAccountInfo().enqueue(object : Callback<AccountResponse?> {
-            override fun onResponse(call: Call<AccountResponse?>, response: Response<AccountResponse?>) {
+    fun getAccountInfo(onResult: (Boolean, List<AccountResponse>?) -> Unit) {
+        authService.getAccountInfo().enqueue(object : Callback<List<AccountResponse>> {
+            override fun onResponse(call: Call<List<AccountResponse>>, response: Response<List<AccountResponse>>) {
                 if (response.isSuccessful) {
-                    val accountResponse = response.body()
-                    Log.d(TAG, "getAccountInfo onResponse - Success: AccountResponse: $accountResponse")
-                    onResult(true, accountResponse)
+                    val accountList = response.body()
+                    Log.d(TAG, "getAccountInfo onResponse - Success: AccountResponse List: $accountList")
+                    onResult(true, accountList)
                 } else {
                     Log.e(TAG, "getAccountInfo onResponse - Error: ${response.code()}")
                     onResult(false, null)
                 }
             }
 
-            override fun onFailure(call: Call<AccountResponse?>, t: Throwable) {
+            override fun onFailure(call: Call<List<AccountResponse>>, t: Throwable) {
                 Log.e(TAG, "getAccountInfo onFailure: ${t.message}")
                 onResult(false, null)
             }
