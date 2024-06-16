@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
 
         viewModel.userInfo.observe(viewLifecycleOwner, Observer { userInfo ->
             userInfo?.let {
-                binding.nombreUsuario.text = "Bienvenido! ${it.firstName}"
+                binding.nombreUsuario.text = "Bienvenido ${it.firstName}!"
             }
         })
 
