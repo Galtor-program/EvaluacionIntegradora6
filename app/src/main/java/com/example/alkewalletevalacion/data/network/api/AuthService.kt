@@ -4,6 +4,7 @@ import com.example.alkewalletevalacion.data.network.response.AccessTokenResponse
 import com.example.alkewalletevalacion.data.network.response.LoginRequest
 import com.example.alkewalletevalacion.data.network.response.UserResponse
 import com.example.alkewalletevalacion.data.network.response.AccountResponse
+import com.example.alkewalletevalacion.data.network.response.TransferRequest
 import com.example.alkewalletevalacion.data.network.response.UserListResponse
 import com.example.alkewalletevalacion.data.network.response.UserListWrapper
 import retrofit2.Call
@@ -35,4 +36,8 @@ interface AuthService {
      */
     @GET("users?limit=5")
     fun getUsers(): Call<UserListWrapper>
+
+
+    @POST("transactions")
+    fun transfer(@Body request: TransferRequest): Call<Void>
 }

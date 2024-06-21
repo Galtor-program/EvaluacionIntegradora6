@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.alkewalletevalacion.R
 
 import com.example.alkewalletevalacion.databinding.FragmentHomeBinding
 import com.example.alkewalletevalacion.domain.usecases.UserInfoUseCase
@@ -60,6 +62,7 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+
         viewModel.userList.observe(viewLifecycleOwner, Observer { userList ->
             userList?.let {
                 Log.d("HomeFragment", "User List: $it")
@@ -75,6 +78,10 @@ class HomeFragment : Fragment() {
         binding.recyclerUsers.apply {
             adapter = usuariosAdapter
             layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        binding.buttonEnviar.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_sendingMoneyFragment)
         }
 
         viewModel.fetchUserInfo()
