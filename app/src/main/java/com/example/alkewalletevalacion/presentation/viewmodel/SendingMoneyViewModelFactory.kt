@@ -11,9 +11,11 @@ class SendingMoneyViewModelFactory(
     private val transferUseCase: TransferUseCase,
     private val userListUseCase: UserListUseCase,
     private val accountInfoUseCase: AccountInfoUseCase
+
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SendingMoneyViewModel::class.java)) {
+
             @Suppress("UNCHECKED_CAST")
             return SendingMoneyViewModel(transferUseCase, userListUseCase, accountInfoUseCase) as T
         }

@@ -4,13 +4,14 @@ import com.example.alkewalletevalacion.data.network.response.AccessTokenResponse
 import com.example.alkewalletevalacion.data.network.response.LoginRequest
 import com.example.alkewalletevalacion.data.network.response.UserResponse
 import com.example.alkewalletevalacion.data.network.response.AccountResponse
+import com.example.alkewalletevalacion.data.network.response.TransactionResponse
 import com.example.alkewalletevalacion.data.network.response.TransferRequest
-import com.example.alkewalletevalacion.data.network.response.UserListResponse
 import com.example.alkewalletevalacion.data.network.response.UserListWrapper
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AuthService {
     /**
@@ -37,7 +38,13 @@ interface AuthService {
     @GET("users?limit=5")
     fun getUsers(): Call<UserListWrapper>
 
-
     @POST("transactions")
     fun transfer(@Body request: TransferRequest): Call<Void>
+
+    @GET("transactions")
+    fun getTransactions(): Call<List<TransactionResponse>>
+
+    @POST("accounts/{id}")
+    fun depositOrTransfer(@Path("id") accountId: Int, @Body request: TransferRequest): Call<Void>
+
 }

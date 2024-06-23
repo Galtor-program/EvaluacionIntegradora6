@@ -1,7 +1,7 @@
 package com.example.alkewalletevalacion.presentation.view
 
+import android.R
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +10,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import com.example.alkewalletevalacion.R
 import com.example.alkewalletevalacion.data.network.response.TransferRequest
 import com.example.alkewalletevalacion.data.network.retrofit.RetrofitHelper
 import com.example.alkewalletevalacion.databinding.FragmentSendingMoneyBinding
@@ -44,35 +42,28 @@ class SendingMoneyFragment : Fragment() {
         val transferUseCase = TransferUseCase(authService)
         val userListUseCase = UserListUseCase(authService)
         val accountInfoUseCase = AccountInfoUseCase(authService)
-        val viewModelFactory =
-            SendingMoneyViewModelFactory(transferUseCase, userListUseCase, accountInfoUseCase)
+        val viewModelFactory = SendingMoneyViewModelFactory(transferUseCase, userListUseCase, accountInfoUseCase)
         viewModel = ViewModelProvider(this, viewModelFactory).get(SendingMoneyViewModel::class.java)
 
         setupSpinner()
         setupListeners()
 
-        viewModel.usuariosList.observe(viewLifecycleOwner, Observer { userList ->
+        viewModel.userList.observe(viewLifecycleOwner, Observer { userList ->
             userList?.let {
                 val userNames = it.map { user -> "${user.firstName} ${user.lastName}" }
-                val adapter =
-                    ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, userNames)
+                val adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, userNames)
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.spinnerUsers.adapter = adapter
             }
         })
 
-        viewModel.fetchUsuariosList()
+        viewModel.fetchUserList()
         viewModel.fetchAccountInfo()
     }
 
     private fun setupSpinner() {
         binding.spinnerUsers.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 // Acción cuando se selecciona un elemento
             }
 
@@ -84,32 +75,14 @@ class SendingMoneyFragment : Fragment() {
 
     private fun setupListeners() {
         binding.enviarTansferencia.setOnClickListener {
-            val amountText = binding.cantidadDinero.text.toString()
-            val amount = amountText.toIntOrNull()
+            val amount = binding.cantidadDinero.text.toString().toInt()
             val concept = binding.notaTransferencia.text.toString()
             val selectedUserIndex = binding.spinnerUsers.selectedItemPosition
-            val selectedUser = viewModel.usuariosList.value?.getOrNull(selectedUserIndex)
+            val selectedUser = viewModel.userList.value?.get(selectedUserIndex)
+            val accountId = viewModel.accountInfo.value?.firstOrNull()?.id ?: return@setOnClickListener
+            val userId = viewModel.accountInfo.value?.firstOrNull()?.userId ?: return@setOnClickListener
 
-            if (amount == null || amountText.isBlank()) {
-                Log.e("SendingMoneyFragment", "Amount is invalid")
-                return@setOnClickListener
-            }
-
-            if (selectedUser == null) {
-                Log.e("SendingMoneyFragment", "Selected user is null or invalid")
-                return@setOnClickListener
-            }
-
-            val accountId = viewModel.accountInfo.value?.firstOrNull()?.id
-            if (accountId == null) {
-                Log.e("SendingMoneyFragment", "Account id is null or invalid")
-                return@setOnClickListener
-            }
-
-            val toAccountId = selectedUser.accountId ?: run {
-                Log.e("SendingMoneyFragment", "Selected user account id is null")
-                return@setOnClickListener
-            }
+            val toAccountId = selectedUser?.id ?: return@setOnClickListener
 
             val transferRequest = TransferRequest(
                 amount = amount,
@@ -117,14 +90,11 @@ class SendingMoneyFragment : Fragment() {
                 date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()),
                 type = "payment",
                 accountId = accountId,
-                userId = selectedUser.id,
+                userId = userId,
                 to_account_id = toAccountId
             )
 
-            viewModel.makeTransfer(transferRequest)
-
-            // Navegar de regreso al HomeFragment
-            findNavController().popBackStack(R.id.homeFragment, false)
+            viewModel.depositOrTransfer(toAccountId, transferRequest)
         }
     }
 }
