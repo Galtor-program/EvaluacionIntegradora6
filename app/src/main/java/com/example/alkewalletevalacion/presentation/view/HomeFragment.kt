@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.example.alkewalletevalacion.R
 
 import com.example.alkewalletevalacion.databinding.FragmentHomeBinding
 import com.example.alkewalletevalacion.domain.usecases.UserInfoUseCase
@@ -56,9 +58,18 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+        /**
+         * Boton para navegar al enviarDinero
+         */
+        binding.buttonEnviar.setOnClickListener{
+            findNavController().navigate(R.id.action_homeFragment_to_sendingMoneyFragment)
+        }
 
         viewModel.fetchUserInfo()
     }
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
