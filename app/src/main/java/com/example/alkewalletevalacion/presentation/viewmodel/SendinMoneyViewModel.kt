@@ -3,36 +3,23 @@ package com.example.alkewalletevalacion.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.alkewalletevalacion.data.network.api.AuthService
-import com.example.alkewalletevalacion.data.network.response.User
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class SendingMoneyViewModel(private val authService: AuthService) : ViewModel() {
+import com.example.alkewalletevalacion.data.network.response.UserListResponse
+import com.example.alkewalletevalacion.domain.usecases.UserListUseCase
 
-    private val _users = MutableLiveData<List<User>>()
-    val users: LiveData<List<User>> = _users
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+class SendingMoneyViewModel(private val userListUseCase: UserListUseCase) : ViewModel() {
 
-    fun fetchUsers() {
-        authService.getUsers().enqueue(object : Callback<List<User>> {
-            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
-                if (response.isSuccessful) {
-                    val userList = response.body()
-                    if (userList != null) {
-                        _users.value = userList.take(5) // Tomar los primeros 5 usuarios
-                    }
-                } else {
-                    _error.value = "Error: ${response.code()} ${response.message()}"
-                }
+    private val _usuariosList = MutableLiveData<List<UserListResponse>>()
+    val usuariosList: LiveData<List<UserListResponse>> get() = _usuariosList
+
+    fun fetchUsuariosList() {
+        userListUseCase.getUsers { success, users ->
+            if (success) {
+                _usuariosList.value = users?.take(5) // Tomar solo los primeros 5 usuarios
+            } else {
+                // Manejar el error
             }
-
-            override fun onFailure(call: Call<List<User>>, t: Throwable) {
-                _error.value = "Error: ${t.message}"
-            }
-        })
+        }
     }
 }

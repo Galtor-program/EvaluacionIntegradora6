@@ -4,7 +4,7 @@ import com.example.alkewalletevalacion.data.network.response.AccessTokenResponse
 import com.example.alkewalletevalacion.data.network.response.LoginRequest
 import com.example.alkewalletevalacion.data.network.response.UserResponse
 import com.example.alkewalletevalacion.data.network.response.AccountResponse
-import com.example.alkewalletevalacion.data.network.response.User
+import com.example.alkewalletevalacion.data.network.response.UserListWrapper
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -32,6 +32,6 @@ interface AuthService {
     /**
      * Traer listado de usuarios
      *      */
-    @GET("users")
-    fun getUsers(): Call<List<User>>
+    @GET("users?limit=5")
+    fun getUsers(): Call<UserListWrapper>
 }

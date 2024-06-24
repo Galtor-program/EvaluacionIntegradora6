@@ -2,10 +2,10 @@ package com.example.alkewalletevalacion.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.alkewalletevalacion.data.network.api.AuthService
+import com.example.alkewalletevalacion.domain.usecases.UserListUseCase
 
 class SendingMoneyViewModelFactory(
-    private val authService: AuthService
+    private val authService: UserListUseCase
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
