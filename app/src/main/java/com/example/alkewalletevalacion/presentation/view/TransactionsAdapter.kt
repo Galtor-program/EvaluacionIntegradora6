@@ -12,6 +12,7 @@ import com.example.alkewalletevalacion.domain.utils.GlobalUserList
 class TransactionAdapter(private var transactions: List<TransactionResponse>) :
     RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
+    // ViewHolder del adaptador
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val transaccionTxt: TextView = itemView.findViewById(R.id.transaccionTxt)
         val dateTxT: TextView = itemView.findViewById(R.id.dateTxT)

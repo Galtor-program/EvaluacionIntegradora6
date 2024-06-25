@@ -1,25 +1,40 @@
 package com.example.alkewalletevalacion.domain.usecases
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
+
 import com.example.alkewalletevalacion.data.network.api.AuthService
+import com.example.alkewalletevalacion.data.network.response.TransactionListResponse
 import com.example.alkewalletevalacion.data.network.response.TransactionResponse
+
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class TransactionUseCase(private val authService: AuthService) {
     fun getTransactions(callback: (Boolean, List<TransactionResponse>?) -> Unit) {
-        authService.getTransactions().enqueue(object : Callback<List<TransactionResponse>> {
-            override fun onResponse(call: Call<List<TransactionResponse>>, response: Response<List<TransactionResponse>>) {
+        authService.getTransactions().enqueue(object : Callback<TransactionListResponse> {
+            override fun onResponse(
+                call: Call<TransactionListResponse>,
+                response: Response<TransactionListResponse>
+            ) {
                 if (response.isSuccessful) {
-                    callback(true, response.body())
+                    val transactionListResponse = response.body()
+                    if (transactionListResponse != null) {
+                        Log.d("TransactionUseCase", "getTransactions - onResponse: ${transactionListResponse.data}")
+                        callback(true, transactionListResponse.data)
+                    } else {
+                        Log.e("TransactionUseCase", "getTransactions - Success but transactionListResponse is null")
+                        callback(true, null)
+                    }
                 } else {
+                    Log.e("TransactionUseCase", "getTransactions - Unsuccessful response")
                     callback(false, null)
                 }
             }
 
-            override fun onFailure(call: Call<List<TransactionResponse>>, t: Throwable) {
+            override fun onFailure(call: Call<TransactionListResponse>, t: Throwable) {
+                Log.e("TransactionUseCase", "getTransactions - onFailure: ${t.message}", t)
                 callback(false, null)
             }
         })

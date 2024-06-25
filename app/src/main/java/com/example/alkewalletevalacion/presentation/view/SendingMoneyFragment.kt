@@ -1,7 +1,7 @@
 package com.example.alkewalletevalacion.presentation.view
 
-import android.R
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +14,7 @@ import com.example.alkewalletevalacion.data.network.response.TransactionRequest
 import com.example.alkewalletevalacion.data.network.retrofit.RetrofitHelper
 import com.example.alkewalletevalacion.databinding.FragmentSendingMoneyBinding
 import com.example.alkewalletevalacion.domain.usecases.CreateTransactionUseCase
+import com.example.alkewalletevalacion.domain.usecases.TransactionUseCase
 import com.example.alkewalletevalacion.domain.usecases.UserListUseCase
 import com.example.alkewalletevalacion.presentation.viewmodel.SendingMoneyViewModel
 import com.example.alkewalletevalacion.presentation.viewmodel.SendingMoneyViewModelFactory
@@ -26,8 +27,8 @@ class SendingMoneyFragment : Fragment() {
     private var _binding: FragmentSendingMoneyBinding? = null
     private val binding get() = _binding!!
 
-
     private lateinit var viewModel: SendingMoneyViewModel
+    private lateinit var transactionAdapter: TransactionAdapter // Asegúrate de tener el adaptador de transacciones
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +45,8 @@ class SendingMoneyFragment : Fragment() {
         val authService = RetrofitHelper.getAuthService(requireContext())
         val userListUseCase = UserListUseCase(authService)
         val createTransactionUseCase = CreateTransactionUseCase(authService)
-        viewModel = ViewModelProvider(this, SendingMoneyViewModelFactory(userListUseCase, createTransactionUseCase)).get(SendingMoneyViewModel::class.java)
+        val transactionUseCase = TransactionUseCase(authService)
+        viewModel = ViewModelProvider(this, SendingMoneyViewModelFactory(userListUseCase, createTransactionUseCase, transactionUseCase)).get(SendingMoneyViewModel::class.java)
 
         setupObservers()
 
@@ -73,6 +75,14 @@ class SendingMoneyFragment : Fragment() {
                 findNavController().navigateUp()
             } else {
                 Toast.makeText(requireContext(), "Error al realizar la transferencia", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // Observa las transacciones actualizadas
+        viewModel.transactions.observe(viewLifecycleOwner, { transactionList ->
+            transactionList?.let {
+                transactionAdapter.updateTransactions(it)
+                Log.d("SendingMoneyFragment", "transactions LiveData Observer - TransactionResponse List: $transactionList")
             }
         })
     }

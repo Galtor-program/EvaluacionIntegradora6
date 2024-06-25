@@ -4,6 +4,7 @@ import com.example.alkewalletevalacion.data.network.response.AccessTokenResponse
 import com.example.alkewalletevalacion.data.network.response.LoginRequest
 import com.example.alkewalletevalacion.data.network.response.UserResponse
 import com.example.alkewalletevalacion.data.network.response.AccountResponse
+import com.example.alkewalletevalacion.data.network.response.TransactionListResponse
 import com.example.alkewalletevalacion.data.network.response.TransactionRequest
 import com.example.alkewalletevalacion.data.network.response.TransactionResponse
 import com.example.alkewalletevalacion.data.network.response.UserListWrapper
@@ -41,7 +42,7 @@ interface AuthService {
      * Transacciones realizadas por el usuario Logueado
      */
     @GET("transactions")
-    fun getTransactions(): Call<List<TransactionResponse>>
+    fun getTransactions(): Call<TransactionListResponse>
 
     /**
      * Realizar una Transferencia

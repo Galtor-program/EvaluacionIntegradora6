@@ -60,10 +60,16 @@ class HomeViewModel(
     private fun fetchTransactions() {
         transactionUseCase.getTransactions { success, transactionResponse ->
             if (success) {
-                _transactions.value = transactionResponse
-                Log.d(TAG, "fetchTransactions - TransactionResponse List: $transactionResponse")
+                if (transactionResponse != null) {
+                    _transactions.value = transactionResponse
+                    Log.d(TAG, "fetchTransactions - TransactionResponse List: $transactionResponse")
+                } else {
+                    _error.value = "Error: Transaction response is null"
+                    Log.e(TAG, "fetchTransactions - Success but transactionResponse is null")
+                }
             } else {
                 _error.value = "Error fetching transactions"
+                Log.e(TAG, "fetchTransactions - Error fetching transactions")
             }
         }
     }
