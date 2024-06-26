@@ -1,3 +1,3 @@
-##ESTA NO ES LA ENTREGA FINAL!
-# Evaluación Integradora Módulo 6
-Favor Revisar el 24 de Junio
+#ESTA NO ES LA ENTREGA FINAL!
+#SE ESPERA ENTREGA FINAL PARA EL 02/07
+
