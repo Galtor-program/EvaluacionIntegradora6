@@ -7,11 +7,13 @@ import com.example.alkewalletevalacion.data.network.response.AccountResponse
 import com.example.alkewalletevalacion.data.network.response.TransactionListResponse
 import com.example.alkewalletevalacion.data.network.response.TransactionRequest
 import com.example.alkewalletevalacion.data.network.response.TransactionResponse
+import com.example.alkewalletevalacion.data.network.response.UserListResponse
 import com.example.alkewalletevalacion.data.network.response.UserListWrapper
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AuthService {
     /**
@@ -49,4 +51,10 @@ interface AuthService {
      */
     @POST("transactions")
     fun createTransaction(@Body request: TransactionRequest): Call<TransactionResponse>
+
+    /**
+     * Para buscar el nombre del usuario por id
+    */
+
+
 }

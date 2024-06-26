@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.alkewalletevalacion.data.network.response.TransactionRequest
 import com.example.alkewalletevalacion.data.network.retrofit.RetrofitHelper
 import com.example.alkewalletevalacion.databinding.FragmentSendingMoneyBinding
+import com.example.alkewalletevalacion.domain.usecases.AccountInfoUseCase
 import com.example.alkewalletevalacion.domain.usecases.CreateTransactionUseCase
 import com.example.alkewalletevalacion.domain.usecases.TransactionUseCase
 import com.example.alkewalletevalacion.domain.usecases.UserListUseCase
@@ -29,7 +30,8 @@ class SendingMoneyFragment : Fragment() {
 
     private lateinit var viewModel: SendingMoneyViewModel
     private lateinit var transactionAdapter: TransactionAdapter // Asegúrate de tener el adaptador de transacciones
-
+    val usuarioId : Int = 0
+    val cuentaId: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,7 +48,8 @@ class SendingMoneyFragment : Fragment() {
         val userListUseCase = UserListUseCase(authService)
         val createTransactionUseCase = CreateTransactionUseCase(authService)
         val transactionUseCase = TransactionUseCase(authService)
-        viewModel = ViewModelProvider(this, SendingMoneyViewModelFactory(userListUseCase, createTransactionUseCase, transactionUseCase)).get(SendingMoneyViewModel::class.java)
+        val accountInfoUseCase = AccountInfoUseCase(authService)
+        viewModel = ViewModelProvider(this, SendingMoneyViewModelFactory(userListUseCase, createTransactionUseCase, transactionUseCase, accountInfoUseCase)).get(SendingMoneyViewModel::class.java)
 
         setupObservers()
 
@@ -56,6 +59,8 @@ class SendingMoneyFragment : Fragment() {
 
         if (savedInstanceState == null) {
             viewModel.fetchUsuariosList()
+            viewModel.fetchUserId()
+            viewModel.fetchUserAccountId()
         }
     }
 
@@ -78,6 +83,11 @@ class SendingMoneyFragment : Fragment() {
             }
         })
 
+
+
+
+
+
         // Observa las transacciones actualizadas
         viewModel.transactions.observe(viewLifecycleOwner, { transactionList ->
             transactionList?.let {
@@ -89,21 +99,29 @@ class SendingMoneyFragment : Fragment() {
 
     private fun handleSendMoney() {
         val selectedUser = viewModel.usuariosList.value?.get(binding.spinner.selectedItemPosition)
+        val usuarioId = viewModel.userId.value?.get(usuarioId)
+        val cuentaId = viewModel.accountId.value?.get(cuentaId)
         if (selectedUser != null) {
             val amount = binding.dinero.text.toString().toIntOrNull()
             val concept = binding.motivo.text.toString()
             if (amount != null && concept.isNotEmpty()) {
                 val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-                val transactionRequest = TransactionRequest(
-                    amount = amount,
-                    concept = concept,
-                    date = date,
-                    type = "payment",
-                    accountId = 2262, // Reemplaza con el ID de la cuenta del usuario logueado
-                    userId = 3365, // Reemplaza con el ID del usuario logueado
-                    toAccountId = selectedUser.id // ID de la cuenta del usuario seleccionado
-                )
-                viewModel.createTransaction(transactionRequest)
+                val transactionRequest = usuarioId?.userId?.let {
+                    cuentaId?.id?.let { it1 ->
+                        TransactionRequest(
+                            amount = amount,
+                            concept = concept,
+                            date = date,
+                            type = "payment",
+                            accountId = it1, // Reemplaza con el ID de la cuenta del usuario logueado
+                            userId = it, // Reemplaza con el ID del usuario logueado
+                            toAccountId = selectedUser.id // ID de la cuenta del usuario seleccionado
+                        )
+                    }
+                }
+                if (transactionRequest != null) {
+                    viewModel.createTransaction(transactionRequest)
+                }
             } else {
                 Toast.makeText(requireContext(), "Por favor, introduce una cantidad y un concepto válidos", Toast.LENGTH_SHORT).show()
             }

@@ -55,7 +55,7 @@ class UsuariosAdapter(var usuarios: List<Usuarios>) : RecyclerView.Adapter<Usuar
                 nombreUser.text = usuario.nombre
                 dateTxT.text =  usuario.fecha
                 transaccionTxt.text = usuario.saldo
-                imageView.setImageResource(usuario.imagen)
+                //imageView.setImageResource(usuario.imagen)
             }
         }
     }
