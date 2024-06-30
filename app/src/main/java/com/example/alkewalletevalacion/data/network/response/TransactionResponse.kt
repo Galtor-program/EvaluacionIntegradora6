@@ -4,14 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 
 data class TransactionResponse(
-    val id: Int,
-    val amount: String,
-    val concept: String,
-    val date: String,
-    val type: String,
-    val accountId: Int,
-    val userId: Int,
-    val toAccountId: Int,
-    val createdAt: String,
-    val updatedAt: String
+    @SerializedName("amount") val amount: Int,
+    @SerializedName("concept") val concept: String,
+    @SerializedName("date") val date: String,
+    @SerializedName("type") val type: String,
+    @SerializedName("accountId") val accountId: Int,
+    @SerializedName("userId") val userId: Int,
+    @SerializedName("to_account_id") val toAccountId: Int
 )

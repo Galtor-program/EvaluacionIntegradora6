@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.alkewalletevalacion.R
+import com.example.alkewalletevalacion.data.network.response.AccountResponse
 import com.example.alkewalletevalacion.data.network.response.UserListResponse
 import com.example.alkewalletevalacion.data.network.response.UserListWrapper
 
@@ -90,15 +91,7 @@ class HomeFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner, Observer { error ->
             error?.let {
-                Toast.makeText(requireContext(), "Error en el Oberser : $it", Toast.LENGTH_SHORT).show()
-            }
-        })
-        viewModel.transactions.observe(viewLifecycleOwner, Observer { transactionList ->
-            transactionList?.let {
-                transactionAdapter.updateTransactions(it)
-                Log.d(TAG, "transactions LiveData Observer - TransactionResponse List: $transactionList")
-            } ?: run {
-                Log.e(TAG, "transactions LiveData Observer - Transaction list is null")
+                Toast.makeText(requireContext(), "Error en el Observer : $it", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -107,45 +100,63 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_sendingMoneyFragment)
         }
 
-        // Obtener información del usuario y transacciones
+        // Obtener información del usuario, cuentas y transacciones
         viewModel.fetchUserInfo()
-        fetchAllUsers()
+        fetchAllUsersAndAccounts()
     }
 
-    private fun fetchAllUsers() {
+    private fun fetchAllUsersAndAccounts() {
         val authService = RetrofitHelper.getAuthService(requireContext())
+
+        // Fetch Users
         authService.getUsers().enqueue(object : Callback<UserListWrapper> {
             override fun onResponse(call: Call<UserListWrapper>, response: Response<UserListWrapper>) {
                 if (response.isSuccessful) {
-                    val userListResponse = response.body()
-                    if (userListResponse != null) {
-                        GlobalUserList.setUsers(userListResponse.data)
-                        Log.d(TAG, "Users fetched successfully")
-
-                        // Actualizar el RecyclerView con las transacciones del usuario
-                        updateRecyclerView()
-                    } else {
-                        Log.e(TAG, "Response body is null")
-                        Toast.makeText(requireContext(), "Error: Response body is null", Toast.LENGTH_SHORT).show()
-                    }
+                    response.body()?.data?.let { GlobalUserList.setUsers(it) }
+                    Log.d(TAG, "Users fetched successfully")
+                    // Fetch Accounts after Users are fetched
+                    fetchAccounts()
                 } else {
-                    Log.e(TAG, "En el else: ${response.code()} ${response.message()}")
-                    //Toast.makeText(requireContext(), "Error en el else: ${response.code()} ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.e(TAG, "Failed to fetch users: ${response.code()} ${response.message()}")
+                    Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<UserListWrapper>, t: Throwable) {
-                Log.e(TAG, "Error caiste en el failure", t)
-                //Toast.makeText(requireContext(), "Error en el failure: ${t.message}", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Error fetching users", t)
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun fetchAccounts() {
+        val authService = RetrofitHelper.getAuthService(requireContext())
+
+        authService.getAccountInfo().enqueue(object : Callback<List<AccountResponse>> {
+            override fun onResponse(call: Call<List<AccountResponse>>, response: Response<List<AccountResponse>>) {
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        GlobalUserList.setAccounts(it)
+                        Log.d(TAG, "Accounts fetched successfully")
+                        // Actualizar el RecyclerView con las transacciones del usuario
+                        updateRecyclerView()
+                    }
+                } else {
+                    Log.e(TAG, "Failed to fetch accounts: ${response.code()} ${response.message()}")
+                    Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<AccountResponse>>, t: Throwable) {
+                Log.e(TAG, "Error fetching accounts", t)
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun updateRecyclerView() {
         // Aquí deberías actualizar el RecyclerView con las transacciones actualizadas
-        viewModel.transactions.value?.let { transactionList ->
-            transactionAdapter.updateTransactions(transactionList)
-        }
+        viewModel.fetchTransactions()
     }
 
     override fun onDestroyView() {

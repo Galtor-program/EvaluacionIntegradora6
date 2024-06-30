@@ -52,9 +52,7 @@ interface AuthService {
     @POST("transactions")
     fun createTransaction(@Body request: TransactionRequest): Call<TransactionResponse>
 
-    /**
-     * Para buscar el nombre del usuario por id
-    */
+
 
 
 }

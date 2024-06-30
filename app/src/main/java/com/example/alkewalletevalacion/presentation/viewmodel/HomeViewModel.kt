@@ -57,7 +57,7 @@ class HomeViewModel(
         }
     }
 
-    private fun fetchTransactions() {
+    fun fetchTransactions() {
         transactionUseCase.getTransactions { success, transactionResponse ->
             if (success) {
                 if (transactionResponse != null) {

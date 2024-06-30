@@ -1,5 +1,6 @@
 package com.example.alkewalletevalacion.presentation.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +15,12 @@ import com.squareup.picasso.Picasso
 class TransactionAdapter(private var transactions: List<TransactionResponse>) :
     RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
-    // ViewHolder del adaptador
     class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val transaccionTxt: TextView = itemView.findViewById(R.id.transaccionTxt)
         val dateTxT: TextView = itemView.findViewById(R.id.dateTxT)
         val nombreUser: TextView = itemView.findViewById(R.id.nombreUser)
-        val img : ImageView = itemView.findViewById(R.id.avatar1)
+        val img: ImageView = itemView.findViewById(R.id.avatar1)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -29,20 +30,40 @@ class TransactionAdapter(private var transactions: List<TransactionResponse>) :
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
-        holder.transaccionTxt.text = transaction.amount
+        holder.transaccionTxt.text = transaction.amount.toString()
         holder.dateTxT.text = transaction.date
         Picasso.get()
             .load("https://avatar.iran.liara.run/public")
-            .resize(80,80)
+            .resize(80, 80)
             .centerCrop()
             .into(holder.img)
+        val accountId = transaction.toAccountId
 
-        // Buscar el nombre del usuario
-        val user = GlobalUserList.getUserById(transaction.userId)
-        if (user != null) {
-            holder.nombreUser.text = "${user.firstName}"
+        Log.d("TransactionAdapter", "Binding transaction with toAccountId: ${accountId}")
+
+        // Validar toAccountId
+        if (accountId == 0) {
+            Log.e("TransactionAdapter", "Invalid toAccountId: ${accountId}")
+            holder.nombreUser.text = "Invalid Account"
+            return
+        }
+
+        // Buscar la cuenta usando toAccountId
+        val account = GlobalUserList.getAccountById(accountId)
+        if (account != null) {
+            Log.d("TransactionAdapter", "Account found for toAccountId ${accountId}: $account")
+            // Buscar el usuario usando userId de la cuenta
+            val user = GlobalUserList.getUserById(account.userId ?: -1)
+            if (user != null) {
+                Log.d("TransactionAdapter", "User found for userId ${account.userId}: $user")
+                holder.nombreUser.text = "${user.firstName}"
+            } else {
+                Log.e("TransactionAdapter", "User not found for userId ${account.userId}")
+                holder.nombreUser.text = "Error al cargar nombre"
+            }
         } else {
-            holder.nombreUser.text = "Unknown User"
+            Log.e("TransactionAdapter", "Account not found for toAccountId ${accountId}")
+            holder.nombreUser.text = "Error"
         }
     }
 
