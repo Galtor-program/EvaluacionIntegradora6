@@ -105,6 +105,7 @@ class HomeFragment : Fragment() {
         fetchAllUsersAndAccounts()
     }
 
+
     private fun fetchAllUsersAndAccounts() {
         val authService = RetrofitHelper.getAuthService(requireContext())
 
@@ -130,34 +131,37 @@ class HomeFragment : Fragment() {
     }
 
     private fun fetchAccounts() {
-        val authService = RetrofitHelper.getAuthService(requireContext())
+        val apiService = RetrofitHelper.getAuthService(requireContext())
 
-        authService.getAccountInfo().enqueue(object : Callback<List<AccountResponse>> {
+        apiService.getAccountInfo().enqueue(object : Callback<List<AccountResponse>> {
             override fun onResponse(call: Call<List<AccountResponse>>, response: Response<List<AccountResponse>>) {
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        GlobalUserList.setAccounts(it)
-                        Log.d(TAG, "Accounts fetched successfully")
-                        // Actualizar el RecyclerView con las transacciones del usuario
-                        updateRecyclerView()
-                    }
+                    val accounts = response.body() ?: emptyList()
+                    GlobalUserList.setAccounts(accounts)
+                    Log.d("HomeFragment", "Accounts fetched successfully: $accounts")
+                    // Actualizar el RecyclerView con las transacciones del usuario
+                    viewModel.fetchTransactions()
                 } else {
-                    Log.e(TAG, "Failed to fetch accounts: ${response.code()} ${response.message()}")
+                    Log.e("HomeFragment", "Failed to fetch accounts: ${response.code()} ${response.message()}")
                     Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<AccountResponse>>, t: Throwable) {
-                Log.e(TAG, "Error fetching accounts", t)
+                Log.e("HomeFragment", "Error fetching accounts", t)
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun updateRecyclerView() {
-        // Aquí deberías actualizar el RecyclerView con las transacciones actualizadas
-        viewModel.fetchTransactions()
+
+    override fun onResume() {
+        super.onResume()
+        // Forzar la actualización de los datos cuando el fragmento vuelve a ser visible
+        viewModel.fetchUserInfo()
+        fetchAllUsersAndAccounts()
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

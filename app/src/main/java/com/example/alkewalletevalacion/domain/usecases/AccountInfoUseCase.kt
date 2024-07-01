@@ -30,4 +30,15 @@ class AccountInfoUseCase(private val authService: AuthService) {
             }
         })
     }
+
+    suspend fun getAccountDetails(accountId: Int): AccountResponse? {
+        return try {
+            val response = authService.getAccountDetails(accountId)
+            Log.d(TAG, "getAccountDetails - Success: AccountResponse: $response")
+            response
+        } catch (e: Exception) {
+            Log.e(TAG, "getAccountDetails - Error: ${e.message}")
+            null
+        }
+    }
 }

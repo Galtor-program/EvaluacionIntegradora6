@@ -3,6 +3,7 @@ package com.example.alkewalletevalacion.domain.usecases
 import android.util.Log
 
 import com.example.alkewalletevalacion.data.network.api.AuthService
+import com.example.alkewalletevalacion.data.network.response.AccountResponse
 import com.example.alkewalletevalacion.data.network.response.TransactionListResponse
 import com.example.alkewalletevalacion.data.network.response.TransactionResponse
 
@@ -32,6 +33,7 @@ class TransactionUseCase(private val authService: AuthService) {
                     callback(false, null)
                 }
             }
+
 
             override fun onFailure(call: Call<TransactionListResponse>, t: Throwable) {
                 Log.e("TransactionUseCase", "getTransactions - onFailure: ${t.message}", t)

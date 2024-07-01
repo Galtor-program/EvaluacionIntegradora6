@@ -39,11 +39,11 @@ class TransactionAdapter(private var transactions: List<TransactionResponse>) :
             .into(holder.img)
         val accountId = transaction.toAccountId
 
-        Log.d("TransactionAdapter", "Binding transaction with toAccountId: ${accountId}")
+        Log.d("TransactionAdapter", "Binding transaction with toAccountId: $accountId")
 
         // Validar toAccountId
         if (accountId == 0) {
-            Log.e("TransactionAdapter", "Invalid toAccountId: ${accountId}")
+            Log.e("TransactionAdapter", "Invalid toAccountId: $accountId")
             holder.nombreUser.text = "Invalid Account"
             return
         }
@@ -51,7 +51,7 @@ class TransactionAdapter(private var transactions: List<TransactionResponse>) :
         // Buscar la cuenta usando toAccountId
         val account = GlobalUserList.getAccountById(accountId)
         if (account != null) {
-            Log.d("TransactionAdapter", "Account found for toAccountId ${accountId}: $account")
+            Log.d("TransactionAdapter", "Account found for toAccountId $accountId: $account")
             // Buscar el usuario usando userId de la cuenta
             val user = GlobalUserList.getUserById(account.userId ?: -1)
             if (user != null) {
@@ -62,7 +62,7 @@ class TransactionAdapter(private var transactions: List<TransactionResponse>) :
                 holder.nombreUser.text = "Error al cargar nombre"
             }
         } else {
-            Log.e("TransactionAdapter", "Account not found for toAccountId ${accountId}")
+            Log.e("TransactionAdapter", "Account not found for toAccountId $accountId")
             holder.nombreUser.text = "Error"
         }
     }
@@ -73,6 +73,7 @@ class TransactionAdapter(private var transactions: List<TransactionResponse>) :
 
     fun updateTransactions(newTransactions: List<TransactionResponse>) {
         transactions = newTransactions
+        Log.d("TransactionAdapter", "Transactions updated: $transactions")
         notifyDataSetChanged()
     }
 }

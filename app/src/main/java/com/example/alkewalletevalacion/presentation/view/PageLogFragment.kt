@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.alkewalletevalacion.R
 import com.example.alkewalletevalacion.data.network.retrofit.RetrofitHelper
@@ -64,3 +65,5 @@ class PageLogFragment : Fragment() {
           //  viewModel.onSignUpClicked()
         }
     }
+
+

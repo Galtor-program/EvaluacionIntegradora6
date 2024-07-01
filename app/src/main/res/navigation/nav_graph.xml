@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_signupFragment_to_pageLogFragment"
             app:destination="@id/pageLogFragment" />
+        <action
+            android:id="@+id/action_signupFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/pageLogFragment"
@@ -37,6 +40,9 @@
         <action
             android:id="@+id/action_pageLogFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_pageLogFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
@@ -52,6 +58,9 @@
         <action
             android:id="@+id/action_homeFragment_to_requestMoneyFragment"
             app:destination="@id/requestMoneyFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_pageLogFragment"
+            app:destination="@id/pageLogFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"

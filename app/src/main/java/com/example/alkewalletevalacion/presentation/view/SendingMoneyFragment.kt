@@ -77,7 +77,7 @@ class SendingMoneyFragment : Fragment() {
         viewModel.transactionResult.observe(viewLifecycleOwner, { success ->
             if (success) {
                 Toast.makeText(requireContext(), "Transferencia realizada con éxito", Toast.LENGTH_SHORT).show()
-                findNavController().navigateUp()
+                findNavController().popBackStack()
             } else {
                 Toast.makeText(requireContext(), "Error al realizar la transferencia", Toast.LENGTH_SHORT).show()
             }
