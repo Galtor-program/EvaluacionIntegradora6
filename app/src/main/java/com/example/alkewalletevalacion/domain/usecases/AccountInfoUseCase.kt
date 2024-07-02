@@ -9,24 +9,19 @@ import retrofit2.Response
 
 class AccountInfoUseCase(private val authService: AuthService) {
 
-    private val TAG = "AccountInfoUseCase"
-
-    fun getAccountInfo(onResult: (Boolean, List<AccountResponse>?) -> Unit) {
+    fun getAccountInfo(callback: (Boolean, List<AccountResponse>?) -> Unit) {
         authService.getAccountInfo().enqueue(object : Callback<List<AccountResponse>> {
             override fun onResponse(call: Call<List<AccountResponse>>, response: Response<List<AccountResponse>>) {
                 if (response.isSuccessful) {
-                    val accountList = response.body()
-                    Log.d(TAG, "getAccountInfo onResponse - Success: AccountResponse List: $accountList")
-                    onResult(true, accountList)
+                    callback(true, response.body())
                 } else {
-                    Log.e(TAG, "getAccountInfo onResponse - Error: ${response.code()}")
-                    onResult(false, null)
+                    callback(false, null)
                 }
             }
 
             override fun onFailure(call: Call<List<AccountResponse>>, t: Throwable) {
-                Log.e(TAG, "getAccountInfo onFailure: ${t.message}")
-                onResult(false, null)
+                Log.e("AccountInfoUseCase", "getAccountInfo onFailure: ${t.message}")
+                callback(false, null)
             }
         })
     }
