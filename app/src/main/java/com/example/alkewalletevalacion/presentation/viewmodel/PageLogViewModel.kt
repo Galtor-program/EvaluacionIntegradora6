@@ -9,10 +9,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.alkewalletevalacion.data.network.response.LoginRequest
+import com.example.alkewalletevalacion.data.network.response.NewAccountRequest
 import com.example.alkewalletevalacion.domain.usecases.AuthUseCase
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class PageLogViewModel(private val authUseCase: AuthUseCase, application: Application) : AndroidViewModel(application) {
 
+    val navigateToSignUp = MutableLiveData<Unit>()
     val navigationToHome = MutableLiveData<Unit>()
 
     fun onLoginClick(email: String, password: String) {
@@ -23,9 +28,49 @@ class PageLogViewModel(private val authUseCase: AuthUseCase, application: Applic
                 val sharedPreferences = getApplication<Application>().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
                 sharedPreferences.edit().putString("accessToken", accessToken).apply()
 
-                navigationToHome.value = Unit
+                if (accessToken != null) {
+                    checkAndCreateAccount(accessToken) { accountCreated ->
+                        if (accountCreated) {
+                            navigationToHome.value = Unit
+                        } else {
+                            Log.e("PageLogViewModel", "Error al crear la cuenta")
+                        }
+                    }
+                }
             } else {
                 Log.e("PageLogViewModel", "Error en autenticación: No se pudo iniciar sesión.")
+            }
+        }
+    }
+
+    private fun checkAndCreateAccount(accessToken: String, callback: (Boolean) -> Unit) {
+        authUseCase.getUserInfo(accessToken) { success, userResponse ->
+            if (success && userResponse != null) {
+                // Verifica si el usuario tiene cuenta
+                authUseCase.getAccountInfo(accessToken) { accountSuccess, accountResponse ->
+                    if (accountSuccess && !accountResponse.isNullOrEmpty()) {
+                        callback(true) // El usuario ya tiene una cuenta
+                    } else {
+                        // Crear una nueva cuenta para el usuario
+                        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                        val newAccountRequest = userResponse.id?.let {
+                            NewAccountRequest(
+                                creationDate = date,
+                                money = 150000,
+                                isBlocked = false,
+                                userId = it
+                            )
+                        }
+
+                        if (newAccountRequest != null) {
+                            authUseCase.createAccountWithToken(newAccountRequest, accessToken) { accountCreated ->
+                                callback(accountCreated)
+                            }
+                        }
+                    }
+                }
+            } else {
+                callback(false)
             }
         }
     }

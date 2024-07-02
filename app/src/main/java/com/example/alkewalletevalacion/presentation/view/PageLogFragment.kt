@@ -39,10 +39,10 @@ class PageLogFragment : Fragment() {
         // Inicializar el ViewModel
         viewModel = ViewModelProvider(this, PageLogViewModel.Factory(requireActivity().application, authUseCase)).get(PageLogViewModel::class.java)
 
-        // Observer para la navegación hacia la pantalla de registro
-       // viewModel.navigateToSignUp.observe(viewLifecycleOwner, Observer {
-         //   findNavController().navigate(R.id.action_pageLogFragment_to_signupFragment)
-        //})
+
+       viewModel.navigateToSignUp.observe(viewLifecycleOwner, Observer {
+         findNavController().navigate(R.id.action_pageLogFragment_to_signupFragment)
+        })
 
         // Observer para la navegación hacia la pantalla de Home
         viewModel.navigationToHome.observe(viewLifecycleOwner, Observer {

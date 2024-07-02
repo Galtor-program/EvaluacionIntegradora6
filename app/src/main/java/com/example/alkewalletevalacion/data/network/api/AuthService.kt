@@ -71,9 +71,9 @@ interface AuthService {
     @POST("accounts")
     suspend fun createAccount(@Body newAccountRequest: NewAccountRequest): AccountResponse
     @POST("accounts")
-    suspend fun createAccountWithToken(
-        @Header("Authorization") token: String,
-        @Body newAccountRequest: NewAccountRequest
-    ): Boolean
+    fun createAccountWithToken(
+        @Body newAccountRequest: NewAccountRequest,
+        @Header("Authorization") token: String
+    ): Call<Void>
 
 }

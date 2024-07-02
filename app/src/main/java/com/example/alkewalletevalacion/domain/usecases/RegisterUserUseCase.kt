@@ -21,8 +21,5 @@ class RegisterUserUseCase(private val authService: AuthService) {
         return authService.createAccount(newAccountRequest)
     }
 
-    // Método para crear una cuenta con token de autorización
-    suspend fun createAccountWithToken(newAccountRequest: NewAccountRequest, token: String): Boolean {
-        return authService.createAccountWithToken("Bearer $token", newAccountRequest)
-    }
+
 }
